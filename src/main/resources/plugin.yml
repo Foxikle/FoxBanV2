@@ -1,0 +1,8 @@
+name: FoxBanV2
+version: '${project.version}'
+main: me.foxikle.foxbanv2.Main
+api-version: 1.19
+prefix: FB2
+depend: [ FoxRank ]
+authors: [ Foxikle ]
+description: My second attempt at making a (Much better) punishment plugin
