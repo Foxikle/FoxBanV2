@@ -1,0 +1,49 @@
+# _______   ______   ___   ___ .______        ___      .__   __.    ____    ____  ___
+#|   ____| /  __  \  \  \ /  / |   _  \      /   \     |  \ |  |    \   \  /   / |__ \
+#|  |__   |  |  |  |  \  V  /  |  |_)  |    /  ^  \    |   \|  |     \   \/   /     ) |
+#|   __|  |  |  |  |   >   <   |   _  <    /  /_\  \   |  . `  |      \      /     / /
+#|  |     |  `--'  |  /  .  \  |  |_)  |  /  _____  \  |  |\   |       \    /     / /_
+#|__|      \______/  /__/ \__\ |______/  /__/     \__\ |__| \__|        \__/     |____|
+#
+#
+#
+#                                     THIS IS A YAML FILE
+#                    There are a few rules to yaml, so read CAREFULLY!!
+#
+# 1. If you'd like to comment something out, use a '#'
+# 2. If you delete a portion of this file, Delete or rename this file and a new one will be
+#    generated on the next server restart.
+# 3. If you are getting an error related to this file, double check that there are no tabs.
+# 4. NEVER, EVER USE A TAB, ALWAYS USE TWO SPACES.
+
+#  DisableLogging -> Disabled logging, this defaults to false.
+DisableLogging: False
+
+# BanReasons -> These allow you to customize your ban reasons.
+BanReasons:
+  - SECURITY: Suspicious activity has been detected on your account.
+  - HACKING: Cheating through the use of unfair game mechanics. (Hacking)
+  - DUPING: Using unfair game mechanics to duplicate items.
+  - BUG ABUSE: Using unintentional bugs or defects to your advantage.
+  - INAPPROPRIATE COSMETICS: Using a skin or cape that violates our terms of service.
+  - INAPPROPRIATE BUILD: Building a structure that violates our terms of service.
+  - BOOSTING: Attempting to Boost another player's stats.
+
+# BanDuration -> These allow your to customise the lengths of bans.
+
+BanDuration:
+  - 1d: 1
+  - 7d: 7
+  - 30d: 30
+  - 60d: 60
+  - 90d: 90
+  - 180d: 180
+  - 270d: 270
+  - 360d: 360
+  - PERMANANT: 999999999
+
+# ServerName -> Name of your server.
+ServerName: The Foxikle Network
+
+#AppealLink -> A link to appeal from.
+AppealLink: Discord.gg/BlahBlahBlah

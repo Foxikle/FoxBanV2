@@ -1,0 +1,18 @@
+#                    _ _ _       _
+#     /\            | (_) |     | |
+#    /  \  _   _  __| |_| |_    | |     ___   __ _
+#   / /\ \| | | |/ _` | | __|   | |    / _ \ / _` |
+#  / ____ \ |_| | (_| | | |_    | |___| (_) | (_| |
+# /_/    \_\__,_|\__,_|_|\__|   |______\___/ \__, |
+#                                             __/ |
+#                                            |___/
+#
+#
+#                                     THIS IS A YAML FILE
+#                    There are a few rules to yaml, so read CAREFULLY!!
+#
+# 1. If you'd like to comment something out, use a '#'
+# 2. If you delete a portion of this file, Delete or rename this file and a new one will be
+#    generated on the next server restart.
+# 3. If you are getting an error related to this file, double check that there are no tabs.
+# 4. NEVER, EVER USE A TAB, ALWAYS USE TWO SPACES.
