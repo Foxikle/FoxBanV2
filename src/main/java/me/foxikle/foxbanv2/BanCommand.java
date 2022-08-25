@@ -19,6 +19,7 @@ import java.util.logging.Level;
 
 import static java.util.Objects.hash;
 import static me.foxikle.foxrank.FoxRank.getRank;
+import static org.bukkit.ChatColor.*;
 
 
 public class BanCommand implements CommandExecutor, TabExecutor {
@@ -29,69 +30,74 @@ public class BanCommand implements CommandExecutor, TabExecutor {
     private boolean silent = false;
     private File file = new File("plugins/FoxBanV2/Config.yml");
     private YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+    private String banID = null;
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (label.equalsIgnoreCase("fban")) {
+        if (label.equalsIgnoreCase("ban")) {
             if (sender instanceof Player) {
                 Player banner = (Player) sender;
                 if (getRank(banner).getPowerLevel() >= 80) {
-                    if (args.length < 4) {
+                    if (args.length < 5) {
                         if (Bukkit.getServer().getPlayer(args[0]) != null) {
                             Player banee = Bukkit.getServer().getPlayer(args[0]);
-                            if(args[1].equalsIgnoreCase("SECURITY")){
-                                reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
-                            } else if (args[1].equalsIgnoreCase("HACKING")) {
-                                reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
-                            } else if (args[1].equalsIgnoreCase("DUPING")) {
-                                reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
-                            } else if (args[1].equalsIgnoreCase("BUG ABUSE")) {
-                                reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
-                            } else if (args[1].equalsIgnoreCase("INAPPROPRIATE COSMETICS")) {
-                                reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
-                            } else if (args[1].equalsIgnoreCase("INAPPROPRIATE BUILD")) {
-                                reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
-                            } else if (args[1].equalsIgnoreCase("BOOSTING")) {
-                                reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                            if(getRank(banee).getPowerLevel() >= getRank(banner).getPowerLevel()){
+                                banner.sendMessage(ChatColor.RED + "You do not have permission do ban players with a higher or equal rank.");
                             } else {
-                                reason = args[1];
-                            }
-                                if(args[2].equalsIgnoreCase("1d")){
+                                if (args[1].equalsIgnoreCase("SECURITY")) {
+                                    reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                                } else if (args[1].equalsIgnoreCase("HACKING")) {
+                                    reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                                } else if (args[1].equalsIgnoreCase("DUPING")) {
+                                    reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                                } else if (args[1].equalsIgnoreCase("BUG_ABUSE")) {
+                                    reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                                } else if (args[1].equalsIgnoreCase("INAPPROPRIATE_COSMETICS")) {
+                                    reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                                } else if (args[1].equalsIgnoreCase("INAPPROPRIATE_BUILD")) {
+                                    reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                                } else if (args[1].equalsIgnoreCase("BOOSTING")) {
+                                    reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
+                                } else {
+                                    reason = args[1];
+                                }
+                                if (args[2].equalsIgnoreCase("1d")) {
                                     rawDuration = "1";
-                                } else if(args[2].equalsIgnoreCase("7d")){
+                                } else if (args[2].equalsIgnoreCase("7d")) {
                                     rawDuration = "7";
-                                } else if(args[2].equalsIgnoreCase("30d")){
+                                } else if (args[2].equalsIgnoreCase("30d")) {
                                     rawDuration = "30";
-                            }    else if(args[2].equalsIgnoreCase("60d")){
+                                } else if (args[2].equalsIgnoreCase("60d")) {
                                     rawDuration = "60";
-                                } else if(args[2].equalsIgnoreCase("90d")){
+                                } else if (args[2].equalsIgnoreCase("90d")) {
                                     rawDuration = "90";
-                                } else if(args[2].equalsIgnoreCase("180d")){
+                                } else if (args[2].equalsIgnoreCase("180d")) {
                                     rawDuration = "180";
-                                } else if(args[2].equalsIgnoreCase("270d")){
+                                } else if (args[2].equalsIgnoreCase("270d")) {
                                     rawDuration = "270";
-                                } else if(args[2].equalsIgnoreCase("360d")){
+                                } else if (args[2].equalsIgnoreCase("360d")) {
                                     rawDuration = "360";
-                                } else if(args[2].equalsIgnoreCase("PERMANANT")){
+                                } else if (args[2].equalsIgnoreCase("PERMANANT")) {
                                     rawDuration = "PERMANANT";
                                 } else {
                                     banner.sendMessage(ChatColor.RED + "Invalid duration, use tab completion for a list of valid durations.");
                                 }
-                                if(args[3].equalsIgnoreCase("SILENT")){
+                                if (args[3].equalsIgnoreCase("SILENT")) {
                                     silent = true;
-                                } else if(args[3].equalsIgnoreCase("PUBLIC")){
+                                } else if (args[3].equalsIgnoreCase("PUBLIC")) {
                                     silent = false;
-                                } else{
+                                } else {
                                     banner.sendMessage(ChatColor.RED + "Invalid Argument: <SILENT/PUBLIC>");
                                 }
-
+                                reason = removeUnderScore(reason);
+                                banID = getBanID(banee);
                                 banPlayer(banner, banee, silent, reason, rawDuration, args[1], yml.getString("ServerName"), yml.getString("AppealLink"));
 
-
+                            }
                         } else {
                             banner.sendMessage(ChatColor.RED + "Could not find that player");
                         }
                     } else {
-                        banner.sendMessage(ChatColor.RED + "Incorrect usage: /ban <PLAYER> <REASON> <DURATION> <SILENT/PUBLIC>");
+                        banner.sendMessage(ChatColor.RED + "Incorrect usage: /fban <PLAYER> <REASON> <DURATION> <SILENT/PUBLIC>");
                     }
                 } else {
                     banner.sendMessage(ChatColor.RED + "You must have MODERATOR rank for higher to use this command.");
@@ -115,24 +121,24 @@ public class BanCommand implements CommandExecutor, TabExecutor {
             expires = Date.from(new Date().toInstant().plusSeconds(durInt * 24 * 60 * 60));
         }
         if(!duration.equalsIgnoreCase("PERMANANT")) {
-            Bukkit.getBanList(BanList.Type.NAME).addBan(banee.getName(), bumper + ChatColor.RED + "You are banned from " + serverName + ". \n" + ChatColor.AQUA + "Reason: " + ChatColor.RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last for " + duration + "days." + bumper, expires, banner.getName());
-            banee.kickPlayer(bumper + ChatColor.RED + "You are banned from " + serverName + ". \n" + ChatColor.AQUA + "Reason: " + ChatColor.RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last for " + duration + "days." + bumper);
-            addAuditLogEntry(banner, banee, reason, duration, getBanID(banee));
+            addAuditLogEntry(banner, banee, reason, duration, banID);
+            Bukkit.getBanList(BanList.Type.NAME).addBan(banee.getName(), bumper + ChatColor.RED + BOLD +"You are banned from " + serverName + ". \n\n" + ChatColor.AQUA + "Reason: " + RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last for " + duration + " day(s)." + AQUA + "\n\nBan ID: " + RESET + banID + "\n Sharing your Ban ID may affect the processing of your appeal." + ChatColor.AQUA + "\nAppeal at: " + appealLink + bumper, expires, banner.getName());
+            banee.kickPlayer(bumper + ChatColor.RED + BOLD + "You are banned from " + serverName + ". \n\n" + ChatColor.AQUA + "Reason: " + RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last for " + duration + " day(s)." + AQUA + "\n\nBan ID: " + RESET + banID + "\n Sharing your Ban ID may affect the processing of your appeal." + ChatColor.AQUA + "\nAppeal at: " + appealLink + bumper);
         } else {
-            Bukkit.getBanList(BanList.Type.NAME).addBan(banee.getName(), bumper + ChatColor.RED + "You are permanantly banned from " + serverName + ". \n" + ChatColor.AQUA + "Reason: " + ChatColor.RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last indefinetly." + bumper, expires, banner.getName());
-            banee.kickPlayer(bumper + ChatColor.RED + "You are permanantly banned from " + serverName + ". \n" + ChatColor.AQUA + "Reason: " + ChatColor.RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last indefinetly." + bumper);
-            addAuditLogEntry(banner, banee, reason, duration, getBanID(banee));
+            addAuditLogEntry(banner, banee, reason, duration, banID);
+            Bukkit.getBanList(BanList.Type.NAME).addBan(banee.getName(), bumper + ChatColor.RED + BOLD + "You are permanantly banned from " + serverName + ". \n\n" + ChatColor.AQUA + "Reason: " + RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last indefinetly." + AQUA + "\n\nBan ID: " + RESET + banID + "\n Sharing your Ban ID may affect the processing of your appeal." + ChatColor.AQUA + "\n Appeal at: " + appealLink + bumper, expires, banner.getName());
+            banee.kickPlayer(bumper + ChatColor.RED + BOLD + "You are permanantly banned from " + serverName + ". \n\n" + ChatColor.AQUA + "Reason: " + RESET + reasonStr + ChatColor.AQUA + "\n Your ban will last indefinetly." + AQUA + "\n\nBan ID: " + RESET + banID + "\n Sharing your Ban ID may affect the processing of your appeal." + ChatColor.AQUA + "\nAppeal at: " + appealLink + bumper);
         }
 
         if(!broadcastReason.equalsIgnoreCase("SECURITY")) {
             if (silent) {
                 banner.getWorld().playSound(banner.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1000f, 1);
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + "A player was removed from your game for " + broadcastReason);
-                banner.sendMessage(ChatColor.RED + "" +  ChatColor.BOLD +  banee.getName() + " was banned silently for " + reasonStr + ".");
+                banner.sendMessage(ChatColor.RED + "" +  ChatColor.BOLD +  banee.getName() + " was banned silently for " + reasonStr);
             } else {
                 Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + banee.getName() + " was removed from your game for " + broadcastReason);
                 banner.getWorld().playSound(banner.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1000f, 1);
-                banner.sendMessage(ChatColor.RED + "" +  ChatColor.BOLD +  banee.getName() + " was banned for " + reasonStr + ".");
+                banner.sendMessage(ChatColor.RED + "" +  ChatColor.BOLD +  banee.getName() + " was banned for " + reasonStr);
             }
         } else{
             banner.sendMessage(ChatColor.RED + "" +  ChatColor.BOLD +  banee.getName() + " was banned for SECURITY.");
@@ -143,19 +149,20 @@ public class BanCommand implements CommandExecutor, TabExecutor {
         File file = new File("plugins/FoxBanV2/AuditLog.yml");
         YamlConfiguration ymlConfig = YamlConfiguration.loadConfiguration(file);
         String type = "NAME";
-        Map<Integer, String> map = new HashMap<>();
-        map.put(1, banner.getName());
-        map.put(2, bannee.getUniqueId().toString());
-        map.put(3, reason);
-        map.put(4, duration);
-        map.put(5, type);
-        map.put(6, banID);
-        ymlConfig.createSection("", map);
+        Map<String, String> map = new HashMap<>();
+        map.put("Staff", banner.getName());
+        map.put("Player Banned", bannee.getUniqueId().toString());
+        map.put("Reason", reason);
+        map.put("Duration", duration);
+        map.put("Ban Type", type);
+        map.put("Time", Instant.now().toString());
+        map.put("Ban ID", banID);
+        ymlConfig.createSection("NAME BAN:" + bannee.getUniqueId() + "||" + banID, map);
 
         try {
             ymlConfig.save(file);
         } catch (IOException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Failed to save audit log entry " + banID, e);
+            Bukkit.getLogger().log(Level.SEVERE, "Failed to save audit log entry: " + banID, e);
         }
     }
 
@@ -180,9 +187,9 @@ public class BanCommand implements CommandExecutor, TabExecutor {
             arguments.add("SECURITY");
             arguments.add("HACKING");
             arguments.add("DUPING");
-            arguments.add("BUG ABUSE");
-            arguments.add("INAPPROPRIATE COSMETICS");
-            arguments.add("INAPPROPRIATE BUILD");
+            arguments.add("BUG_ABUSE");
+            arguments.add("INAPPROPRIATE_COSMETICS");
+            arguments.add("INAPPROPRIATE_BUILD");
             arguments.add("BOOSTING");
 
             return arguments;
@@ -199,7 +206,23 @@ public class BanCommand implements CommandExecutor, TabExecutor {
             arguments.add("PERMANANT");
 
             return arguments;
+        } else if (args.length == 4) {
+            List<String> arguments = new ArrayList<>();
+            arguments.add("SILENT");
+            arguments.add("PUBLIC");
+
+            return arguments;
         }
         return null;
+    }
+
+    private String removeUnderScore(String string){
+
+        if(string.contains("_")) {
+            string = string.replace("_", " ");
+            return string;
+        } else {
+            return string;
+        }
     }
 }
