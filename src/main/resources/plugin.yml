@@ -7,9 +7,7 @@ depend: [ FoxRank ]
 authors: [ Foxikle ]
 description: My second attempt at making a (Much better) punishment plugin.
 commands:
-  fban:
+  ban:
     description: Bans a player from the server.
-    aliases: [ ban ]
-  fip-ban:
-    description: IP-bans a player from the server.
-    aliases: [ ip-ban ]
+  unban:
+    description: Unbans a player.

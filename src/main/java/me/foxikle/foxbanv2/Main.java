@@ -10,9 +10,8 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
         this.saveResource("Config.yml", false);
-        this.saveResource("AuditLog.yml", false);
-        this.getCommand("fban").setExecutor(new BanCommand());
-        this.getCommand("fip-ban").setExecutor(new IP_BanCommand());
+        this.saveResource("Auditlog.yml", false);
+        this.getCommand("ban").setExecutor(new BanCommand());
         this.getCommand("unban").setExecutor(new Unban());
     }
 }
