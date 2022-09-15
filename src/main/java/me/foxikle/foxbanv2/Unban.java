@@ -49,7 +49,7 @@ public class Unban implements CommandExecutor, TabExecutor {
                 }
                 return true;
             }
-            sender.sendMessage("Hey, You cannot do this!");
+            sender.sendMessage("Hey, You cannot do this! Use /pardon <player> if you really want to do this.");
         } else {
             return onCommand(sender, cmd, label, args);
         }
