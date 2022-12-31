@@ -9,5 +9,26 @@ description: My second attempt at making a (Much better) punishment plugin.
 commands:
   ban:
     description: Bans a player from the server.
+    permission: foxban.ban.use
+    permission-message: You do not have the required permissions to execute this command.
   unban:
     description: Unbans a player.
+    permission: foxban.unban.use
+    permission-message: You do not have the required permissions to execute this command.
+permissions:
+  foxban.unban.use:
+    default: op
+    description: Permission to use the /unban command
+  foxban.ban.use:
+    description: Permission to use the /ban command
+    default: op
+  foxban.ban.immune:
+    description: A permission to provide ban immunity.
+    default: false
+  foxban.*:
+    description: WildCard Permission.
+    default: op
+    children:
+      foxban.unban.use:
+      foxban.ban.use:
+      foxban.ban.immune:

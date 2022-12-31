@@ -18,7 +18,6 @@ import java.util.*;
 import java.util.logging.Level;
 
 import static java.util.Objects.hash;
-import static me.foxikle.foxrank.FoxRank.getRank;
 import static org.bukkit.ChatColor.*;
 
 
@@ -36,12 +35,12 @@ public class BanCommand implements CommandExecutor, TabExecutor {
         if (label.equalsIgnoreCase("ban")) {
             if (sender instanceof Player) {
                 Player banner = (Player) sender;
-                if (getRank(banner).getPowerLevel() >= 80) {
+                if (banner.hasPermission("foxban.ban.use")) {
                     if (args.length < 5) {
                         if (Bukkit.getServer().getPlayer(args[0]) != null) {
                             Player banee = Bukkit.getServer().getPlayer(args[0]);
-                            if(getRank(banee).getPowerLevel() >= getRank(banner).getPowerLevel()){
-                                banner.sendMessage(ChatColor.RED + "You do not have permission do ban players with a higher or equal rank.");
+                            if(banee.hasPermission("foxban.ban.immune")){
+                                banner.sendMessage(ChatColor.RED + "That player is immune!");
                             } else {
                                 if (args[1].equalsIgnoreCase("SECURITY")) {
                                     reason = yml.getConfigurationSection("BanReasons".toString()).getString(args[1]);
@@ -100,7 +99,7 @@ public class BanCommand implements CommandExecutor, TabExecutor {
                         banner.sendMessage(ChatColor.RED + "Incorrect usage: /fban <PLAYER> <REASON> <DURATION> <SILENT/PUBLIC>");
                     }
                 } else {
-                    banner.sendMessage(ChatColor.RED + "You must have MODERATOR rank for higher to use this command.");
+                    banner.sendMessage(ChatColor.RED + "You do not have the permission to use this command.");
                     banner.sendMessage(ChatColor.RED + "Please contact a server administrator is you think this is a mistake.");
                 }
                 return true;
