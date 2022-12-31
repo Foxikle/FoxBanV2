@@ -3,7 +3,6 @@ package me.foxikle.foxbanv2;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
-
     public Main instance;
 
     @Override

@@ -20,15 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static me.foxikle.foxrank.FoxRank.getRank;
-
 public class Unban implements CommandExecutor, TabExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (label.equalsIgnoreCase("unban")) {
             if (sender instanceof Player) {
                 Player staff = (Player) sender;
-                if (getRank(staff).getPowerLevel() >= 90) {
+                if (staff.hasPermission("foxban.unban.use")) {
                     if (args.length >=1) {
                         Bukkit.getServer().getOfflinePlayer(args[0]);
                         OfflinePlayer player = Bukkit.getServer().getOfflinePlayer(args[0]);
@@ -44,7 +42,7 @@ public class Unban implements CommandExecutor, TabExecutor {
                         staff.sendMessage(ChatColor.RED + "Incorrect usage: /unban <PLAYER>");
                     }
                 } else {
-                    staff.sendMessage(ChatColor.RED + "You must have ADMIN rank for higher to use this command.");
+                    staff.sendMessage(ChatColor.RED + "You do not have the proper permissions to use this command.");
                     staff.sendMessage(ChatColor.RED + "Please contact a server administrator is you think this is a mistake.");
                 }
                 return true;
